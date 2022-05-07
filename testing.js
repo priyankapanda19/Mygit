@@ -1,8 +1,8 @@
-let myName = function greet (name){
+function greet (x) {
     
-    return "hello my name is " + name
+    return "hello my name is " + x
 }
 
+let result = greet("hello")
+console.log(result)
 
-
-module.exports.myName = myName
