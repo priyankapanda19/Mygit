@@ -24,7 +24,7 @@
 // console.log(newNumbers);
 
 
-// ===================as per arrow function =======================
+// ===================as per arrow function =================================================
 
 // let numbers = [1,2,3,4,5]
 
@@ -58,6 +58,7 @@
 // console.log(productsValue);
 
 // ==================================another use case ===========================================
+
 // let strings = ['1', '2', '3', '4', '5']
 // let numbers = strings.map(item => Number(item)) // let numbers = strings.map(Number)
 // console.log(numbers);

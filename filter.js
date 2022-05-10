@@ -1,13 +1,13 @@
 // =====================================filter array for even numbers only========================
-// let numbers = [1,2,3,4,5]
+let numbers = [1,2,3,4,5]
 
-// let newNumbers = numbers.filter(even)
+let newNumbers = numbers.filter(even)
 
-// function even (item) {
-//     return item % 2 === 0
-// }
+function even (item) {
+    return item % 2 === 0
+}
 
-// console.log(newNumbers);
+console.log(newNumbers);
 
 // ====================================as per arrow function =======================================
 
