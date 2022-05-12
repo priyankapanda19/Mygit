@@ -52,3 +52,13 @@ index 4 = 5
 
 // let winners = participants.slice(0,3) // will print index 0,1,2 
 // console.log(winners);
+
+// ================= my testing ==================
+
+// let number = [1,2,3,4,5,6]
+
+// let newNumber = number.slice(2,4)
+
+// console.log(newNumber);
+
+// will print what you have given as index inside parantheses 
