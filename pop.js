@@ -6,6 +6,8 @@
 
 // it removes the last element of the array by default
 
+// IT WILL REMOVE THE LAST INDEX IN THE ARRAY 
+
 // ================ get the removed item which has been removed =============
 
 let numbers = [1,2,3]
