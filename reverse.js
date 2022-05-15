@@ -8,12 +8,15 @@
 // console.log(hello);
 
 // now comes the use of reverse 
-// let number = [1,2,3,4,5]
+let number = [1,2,3,4,5]
 
-// let newNum = number.concat().reverse() // in video saying doing shallow copy here using concat
+let newNum = number.concat().reverse() // in video saying doing shallow copy here using concat
+// let newNum1 = [...number].reverse() // in video saying doing shallow copy here using spread operator
 
-// console.log(newNum);
-// console.log(number);
+console.log(number);
+console.log(newNum);
+// console.log(newNum1);
+
 
 // another way of copying 
 
@@ -27,11 +30,11 @@
 
 // ============= how would you reverse a string ? ===================
 
-let string = "coding is fun!"
+// let string = "coding is fun!"
 
-let newString = string.split("").reverse().join("")
+// let newString = string.split("").reverse().join("")
 
-console.log(newString);
+// console.log(newString);
 
 // !nuf si gnidoc
 

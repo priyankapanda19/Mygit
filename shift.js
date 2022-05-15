@@ -10,12 +10,19 @@
 
 // ============== to get the removed number ==============
 
-let numbers = [1,2,3,4,5]
+// let numbers = [1,2,3,4,5]
 
-let removedItem = numbers.shift()
+// let removedItem = numbers.shift()
 
-console.log(numbers);
-console.log(removedItem); // this stores the removed item from index 0
+// console.log(numbers);
+// console.log(removedItem); // this stores the removed item from index 0
 
 // output : [ 2, 3, 4, 5 ]
 // output : 1 
+
+// push adds on last index 
+// pop removes from last index 
+// unshift adds on first index 
+// shift removes from first index 
+
+
