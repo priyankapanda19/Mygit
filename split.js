@@ -27,8 +27,12 @@
 // conclusion :- number ko pele string me convert karna padega tab phr uspr string ke methods apply kar skte hai 
 // which is a split methods jo string ka method hai
 
-let str = "1 2 3 4 5"
-newStr = str.split(" ").map(Number)
+// let str = "1 2 3 4 5"
+// newStr = str.split(" ").map(Number)
+// console.log(newStr);
+// let newNewStr = newStr.reverse().join(" ")
+// console.log(newNewStr);'
+
+let str = 5588
+let newStr = str.toString().split("").map(Number).reverse()
 console.log(newStr);
-let newNewStr = newStr.reverse().join(" ")
-console.log(newNewStr);
