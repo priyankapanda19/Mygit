@@ -69,3 +69,8 @@ console.log(numbers);
 // products.sort((a,b) => a.price - b.price)
 
 // console.log(products);
+
+
+let arr = [1,2,5,7,4,3]
+arr.sort()
+console.log(arr);
