@@ -11,3 +11,5 @@ console.log(names);
 // problem : what if there are two names in array 
 // ans - it will return the first one 
 // and this is why we have lastIndexOf because that will return last se first index 
+
+// so it simply gives the index so that you can swap whatever you want on that index 
