@@ -105,3 +105,46 @@ router.get("/films/:filmId", function(req, res){
 
 module.exports = router;
 // adding this comment for no reason
+
+
+//// 9-aug-assignment-prblm-1 /////////////
+
+router.get("/sol1", function (req, res) {
+    
+ 
+    let arr= [1,2,3,5,6,7]
+    
+     let   sum=0
+     
+       
+        for(i=0;i<arr.length;i++){
+            sum +=arr[i]
+            let length1=arr.length
+          
+        }
+        let lastDigit=arr.pop()
+        let consecutiveSum=(lastDigit*(lastDigit+1))/2
+        let missingNumber=consecutiveSum-sum
+
+    res.send( {data:missingNumber}   );
+
+
+    })
+
+//// problm 2//////////
+
+    router.get("/sol2",function(req,res)
+    {
+        let arr=[33,34,35,37,38]
+        let length1=arr.length
+        total=0
+        for(i=0;i<=arr.length-1;i++){
+            total +=arr[i]
+        }
+        let fstNum=arr[0]
+        let lstNum=arr.pop()
+        let conSum=(length1+1)*(fstNum+lstNum)/2
+        let missingNumber=conSum-total
+        res.send({data:missingNumber})
+
+    })
