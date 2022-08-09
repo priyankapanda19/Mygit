@@ -45,6 +45,34 @@ router.get('/films', function (req, res) {
     res.send(films)
 
    })
+
+   router.get('/films/:filmId', function (req, res) {
+    const films=[{
+      id: 1,
+     name: "The Shining"
+    }, {
+     id: 2,
+     name: "Incendies"
+    }, {
+     id: 3,
+     name: "Rang de Basanti"
+    }, {
+     id: 4,
+     name: "Finding Nemo"
+ }]
+
+ let filmId=req.params.filmId
+ for(let i=0;i<films.length;i++){
+
+let films=films[i]
+if(films.id==films){
+    return res.sendStatus(films)
+}
+
+}
+    res.send("invalid") 
+ 
+    })
    
 
 
