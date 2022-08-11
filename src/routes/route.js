@@ -148,3 +148,75 @@ router.get("/sol1", function (req, res) {
         res.send({data:missingNumber})
 
     })
+
+
+    /////////10-aug-assighment/////////
+
+    let players =
+   [
+       {
+           "name": "manish",
+           "dob": "1/1/1995",
+           "gender": "male",
+           "city": "jalandhar",
+           "sports": [
+               "swimming"
+           ]
+       },
+       {
+           "name": "gopal",
+           "dob": "1/09/1995",
+           "gender": "male",
+           "city": "delhi",
+           "sports": [
+               "soccer"
+           ]
+       },
+       {
+        "name": "lokesh",
+           "dob": "1/1/1990",
+           "gender": "male",
+           "city": "mumbai",
+           "sports": [
+               "soccer"
+           ]
+       },
+   ]
+
+
+   router.post('/players', function (req, res) {
+
+    let playerName=req.body.name
+     let playerDob=req.body.dob
+    
+ let playerGender=req.body.gender
+    
+     let playerCity=req.body.city
+    
+     let playerSports=req.body.sports
+     let newPlayers={name:playerName,dob:playerDob,gender:playerGender,city:playerCity,sports:playerSports}
+    
+
+        for(let i=0;i<players.length;i++){
+            
+            let index=players[i]
+            if(index.name===playerName){
+           res.send(  "This is dublicate data,give another data plz"  )}
+        
+        
+        
+           else{ players.push(newPlayers)}
+    
+    res.send( { data: players , status: true }    )
+            }
+    
+
+})
+
+
+
+
+
+
+
+      
