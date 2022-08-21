@@ -41,19 +41,31 @@ const fetchBook= async function(req,res){
     }
 
 //////////problem 5(a)//////////
-const booksPut = async function(req, res){
-    let pub_id1 = '62ffb2b813438236b6dc26b1'
-   // let pub_id2 = '62ffb2b813438236b6dc26b1'
+// const booksPut = async function(req, res){
+//     let pub_id1 = '62ffb2b813438236b6dc26b1'
+//     let pub_id2 = '62ffb2b813438236b6dc26b1'
 
-    let book1 = await bookModel123.updateMany({publisher :pub_id1}, { $set:{isHardCover : false}},{new:true})
-    console.log(book1)
-    res.send({data: book1})
+//     let book1 = await bookModel123.updateMany({publisher :pub_id1,pub_id2}, { $set:{isHardCover : false}},{new:true})
+//     console.log(book1)
+//     res.send({data: book1})
+// }
+
+const booksPut = async function(req, res){
+         
+    let publisher1=await publisherModel123.find({name:"Harper Collins"}).select({_id:1})
+         let book1 = await bookModel123.find().updateMany({publisher1}, { $set:{isHardCover : false}},{new:true})
+         console.log(book1)
+         res.send({data: book1})
+
+
 }
+
+
 /////////problem 5(b)//////////
 const authorRating = async function(req, res){
 
 
-    let increment = await bookModel123.updateMany({ ratings: { $gt: 3.5 }  }, { $inc: { price: +10 } })
+    let increment = await bookModel123.updateMany({ ratings: { $gt: 3.5 }  }, { $inc: { price: 10 } })
     res.send({ data: increment })
 }
 
