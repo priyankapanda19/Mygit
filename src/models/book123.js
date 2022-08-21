@@ -14,9 +14,10 @@ publisher:{
     ref:"Publisher123"
 },
 isHardCover:{
-   type: Boolean,
-   default:false
-}
+    type: Boolean,
+    default:false
+ }
+
 
 }, { timestamps: true });
 

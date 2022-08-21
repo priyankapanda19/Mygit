@@ -36,24 +36,25 @@ const publisherModel123= require("../models/publisher123")
 
 const fetchBook= async function(req,res){
     
-        let authors = await bookModel123.find().populate([{path:'author'},{path:'publisher'}])
+        let authors = await bookModel123.find().populate([{path:'author123'},{path:'publisher123'}])
         res.send({data: authors})
     }
 
 //////////problem 5(a)//////////
 const booksPut = async function(req, res){
-    let pub_id1 = '62ffb28313438236b6dc26ad'
+    let pub_id1 = '62ffb2b813438236b6dc26b1'
    // let pub_id2 = '62ffb2b813438236b6dc26b1'
 
-    let book1 = await bookModel123.findByIdAndUpdate({pub_id1}, {$set: isHardCover == true}, {$new : true})
+    let book1 = await bookModel123.updateMany({publisher :pub_id1}, { $set:{isHardCover : false}},{new:true})
+    console.log(book1)
     res.send({data: book1})
 }
 /////////problem 5(b)//////////
 const authorRating = async function(req, res){
-    let data = await authorModel123.find({ rating: { $gt: 3.5 } }).select({ _id: 1 })
-    idArry = data.map((obj) => { return obj._id.toString() })
-    let up = await bookModel123.updateMany({ author_id: idArry  }, { $inc: { price: +10 } })
-    res.send({ data: up })
+
+
+    let increment = await bookModel123.updateMany({ ratings: { $gt: 3.5 }  }, { $inc: { price: +10 } })
+    res.send({ data: increment })
 }
 
 
