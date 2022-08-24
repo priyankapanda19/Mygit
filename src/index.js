@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const route = require('./routes/route.js');
 const { default: mongoose } = require('mongoose');
 const app = express();
+const commonMW = require ("./middlewares/commonMiddlewares")
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,6 +23,26 @@ app.use (
   );
 
 app.use('/', route);
+
+
+
+ app.use(commonMW.midillWare)
+
+
+
+// var app = express();
+      
+// var dateTime = require('node-datetime');
+// var dt = dateTime.create();
+// var formatted = dt.format('Y-m-d H:M:S');
+// console.log(formatted);
+    
+//app.listen(3000, () => console.log(`App listening on port 3000`))
+
+
+
+
+
 
 
 app.listen(process.env.PORT || 3000, function () {
