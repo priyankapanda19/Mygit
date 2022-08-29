@@ -14,15 +14,17 @@ const userSchema = new mongoose.Schema( {
         type: String,
         enum: ["male", "female", "other"]
     },
-    isDeleted:{
-        type:Boolean,
-        default:false
-    },
     age: Number,
+    isDeleted :{
+        type: Boolean,
+        default : false
+    },
+    posts:{
+        type: [],
+        default : []
+    }
 }, 
+
 { timestamps: true });
 
-module.exports = mongoose.model('User', userSchema)
-
-
-
+module.exports = mongoose.model('userDB', userSchema)

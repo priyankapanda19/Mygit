@@ -1,106 +1,112 @@
 const jwt = require("jsonwebtoken");
-const userModule = require("../models/userModule");
+const userModel = require("../models/userModel");
 
 
-////creatr user//////
-const createUser = async function (req, res) {
- 
-  let data = req.body;
-  let savedData = await userModule.create(data);
-  console.log(req.newAtribute);
-  res.send({ msg: savedData });
-};
 
-////////login user////////////
+//-------------------------------------- PROBLEM 1 ------------------------------------------------------------------------------------
+
+const createUser = async function (req, res) {         //You can name the req, res objects anything
+  try {
+    let data = req.body;                                 //but the first parameter is always the request
+  let savedData = await userModel.create(data);
+  res.status(201).send({msg: savedData})         //the second parameter is always the response
+  //xyz.send({ msg: savedData });
+  }
+  catch(error){
+    //console.log(error.message)
+    res.status(500).send({msg: "Error", error: error.message})
+
+  }
+};                      
+
+//-------------------------------------- PROBLEM 2 ------------------------------------------------------------------------------------
 
 const loginUser = async function (req, res) {
+  try{
   let userName = req.body.emailId;
   let password = req.body.password;
 
-  let user = await userModule.findOne({ emailId: userName, password: password });
+  let user = await userModel.findOne({ emailId: userName, password: password });
+ 
   if (!user)
-    return res.send({
+     return res.status(401).send({
       status: false,
-      msg: "username or the password is not correct",
+      msg: "username or the password is not corerct",
     });
-
-   
-  let token = jwt.sign(
+  
+ 
+  let token = jwt.sign(                  // Once the login is successful, create the jwt token with sign function
     {
-      userId: user._id.toString(),
-      batch: "Plutonium",
+      userId: user._id.toString(),      // Input 1 is the payload or the object containing data to be set in token
+      batch: "plutonium",
       organisation: "FunctionUp",
     },
-    "functionup-plutonium-very-very-secret-key"
+    "functionup-plutonium"                  // Input 2 is the secret
   );
   res.setHeader("x-auth-token", token);
   res.send({ status: true, token: token });
-};
-
-
-///////get user data////////
-
-
-const getUserData = async function (req, res) {
-  let token = req.headers["x-Auth-token"];
-  if (!token) token = req.headers["x-auth-token"];
-
-  
-  if (!token) return res.send({ status: false, msg: "token must be present" });
-
-  console.log(token);
-
-  let decodedToken = jwt.verify(token, "functionup-plutonium-very-very-secret-key");
-  if (!decodedToken)
-    return res.send({ status: false, msg: "token is invalid" });
-
-  let userId = req.params.userId;
-  let userDetails = await userModule.findById(userId);
-  if (!userDetails)
-    return res.send({ status: false, msg: "No such user exists" });
-
-  res.send({ status: true, data: userDetails });
-  
-};
-
-
-/////////update user data/////////////
-
-const updateUser = async function (req, res) {
-  
-  let userId = req.params.userId;
-  let user = await userModule.findById(userId);
-  
-  if (!user) {
-    return res.send("No such user exists");
+  } catch(Error) {
+    res.status(500).send({msg: "Error", error:Error.message})
   }
+};
 
+
+//-------------------------------------- PROBLEM 3 ------------------------------------------------------------------------------------
+
+const getUserData =  function (req, res) { 
+  
+};
+
+
+//-------------------------------------- PROBLEM 4 ------------------------------------------------------------------------------------
+
+const updateUser = async function (req, res) { 
+
+  // let userId = req.params.userId;
+  // let userDetails =  userModel.findById(userId);         
+  // if (!userDetails)
+  //   return res.send({ status: false, msg: "No such user exists" });   //Return an error if no user with the given id exists in the db
+
+  //let userId = req.params.userId;
   let userData = req.body;
-  let updatedUser = await userModule.findOneAndUpdate({ _id: userId }, userData);
+  let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);  
   res.send({ status: updatedUser, data: updatedUser });
 };
 
 
-/////////////delete user data////////
+//-------------------------------------- PROBLEM 5 ------------------------------------------------------------------------------------
+  
+const deleteUser = async function(req, res){
+  // let userId = req.params.userId;
+  // let userDetails =  userModel.findById(userId);         
+  // if (!userDetails)
+  //   return res.send({ status: false, msg: "No such user exists" });   //Return an error if no user with the given id exists in the db
 
+  //let userId = req.params.userId;
+  let userData = req.body;
+  let updatedUser = await userModel.findOneAndUpdate(
+    { _id: userId },{$set : {isDeleted: true}}, userData);
+  res.send({ status: updatedUser, data: updatedUser });
+};
 
-const deleteUser=async function(req,res){
-    let uId=req.params.userId
-    let u=await userModule.findById(uId)
-    if(!u){
-        return res.send("user not exists")
-    }
-    let uData=req.body
-    let deleteUser=await userModule.findByIdAndDelete({_id:uId},uData)
-    res.send({status:true,data:deleteUser})
+// -------------------------------------- PROBLEM 6 ----------------------------------------------------------------------------------
+
+const postMessage = async function(req, res){
+  let message = req.body.message
+      
+  let user = await userModel.findById(req.params.userId)
+    if(!user) return res.send({status: false, msg: 'No such user exists'})
+    
+    let updatedPosts = user.posts
+
+    updatedPosts.push(message)    //add the message to user's posts
+    let updatedUser = await userModel.findOneAndUpdate({_id: user._id},{$set :{posts: updatedPosts}}, {new: true})
+    return res.send({status: true, data: updatedUser})    //return the updated user document
 }
 
-
-
-
-
-module.exports.deleteUser=deleteUser;
 module.exports.createUser = createUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
+module.exports.deleteUser = deleteUser;
+module.exports.postMessage = postMessage

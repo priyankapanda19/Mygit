@@ -3,13 +3,13 @@ const bodyParser = require('body-parser');
 const route = require('./routes/route.js');
 const { default: mongoose } = require('mongoose');
 const app = express();
-const middle = require('./middleware/middleWare.js');
+const middle = require('./middleware/auth.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-mongoose.connect("mongodb+srv://Priyanka19:G8reXRlHUbBX65ev@plutonium01.9fxu8wj.mongodb.net/Authentication", {
+mongoose.connect("mongodb+srv://Priyanka19:G8reXRlHUbBX65ev@plutonium01.9fxu8wj.mongodb.net/Authentication123", {
     useNewUrlParser: true
 })
 .then( () => console.log("MongoDb is connected"))
