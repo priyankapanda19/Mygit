@@ -6,23 +6,28 @@ const userModel = require("../models/userModel");
 
 const authenticate =  function(req, res, next){
     
+  try{
+    let token = req.headers["x-auth-token"];
   
-    let token = req.headers["x-Auth-Token"];
-  if (!token) token = req.headers["x-auth-token"];
-  if (!token) return res.send({ status: false, msg: "token must be present" });    //If no token is present in the request header return error
+  if (!token) return res.status(404).send({ msg: "token must be present" });    //If no token is present in the request header return error
   console.log(token);
   
   let decodedToken = jwt.verify(token, "functionup-plutonium");   // If a token is present then decode the token with verify function
-  if (!decodedToken)                                         // Input 1 is the token to be decoded and Input 2 was same as generated earlier
-    return res.send({ status: false, msg: "token is invalid" });
+  if (!decodedToken) 
+  return res.status(500).send({status:false,msg:"token is invalid"})  
+  req.token=decodedToken                                      // Input 1 is the token to be decoded and Input 2 was same as generated earlier
+   
   
       next()
-};
-
+}catch(err){
+return res.status(500).send({msg: "Servor error or token is invalid" })
+}
+}
 
 // --------------------------------- Authorisation --------------------------------
 
 const authorise = async function(req, res, next){
+  try{
     let token = req.headers["x-auth-token"];
         
     let decodedToken = jwt.verify(token, "functionup-plutonium");
@@ -36,13 +41,15 @@ const authorise = async function(req, res, next){
     let userLoggedIn = decodedToken.userId
   
     if(userToBeModified != userLoggedIn) 
-    return res.send({status: false, msg: 'User logged is not allowed to modify the requested users data'});
+    return res.status(403).send({status: false, msg: 'User logged is not allowed to modify the requested users data'});
 
-    res.send({ status: true, data: userDetails });
+   
 
   next()
+  }catch(error){
+  res.send({ status: true, data: userDetails });
 }
-
+}
 
 module.exports.authenticate = authenticate
 module.exports.authorise = authorise
