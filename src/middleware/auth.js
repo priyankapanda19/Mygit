@@ -7,7 +7,7 @@ const userModel = require("../models/userModel");
 const authenticate =  function(req, res, next){
     
   
-    let token = req.headers["x-Auth-Token"];
+   // let token = req.headers["x-Auth-Token"];
   if (!token) token = req.headers["x-auth-token"];
   if (!token) return res.send({ status: false, msg: "token must be present" });    //If no token is present in the request header return error
   console.log(token);
