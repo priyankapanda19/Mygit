@@ -1,5 +1,5 @@
 const jwt=require("jsonwebtoken")
-const userModel=require("../Models/authorModel")
+const blogModel = require("../models/blogModel");
 
 
 //-------------------------------authentication-----------------------------//
@@ -52,6 +52,8 @@ const authorisation = async function(req, res, next){
   }
   
   //--------------------------------------/////---------------------------------//
+
+  
   module.exports.authentication = authentication
   module.exports.authorisation = authorisation
   

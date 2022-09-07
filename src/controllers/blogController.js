@@ -158,6 +158,22 @@ const deleteQueryParams = async function (req, res) {
         if (deletedBlogs.length === 0) {
             return res.status(404).send({ status: false, error: "Blog is empty" })
         }
+        const blogAuth = deletedBlogs.filter((blog) => {                         // authorisation using filter
+            if (blog.authorId == req.loggedInAuthorId)
+                return blog._id
+                 else 
+               return res.status(404).send({status: false, msg: "User is not authorised to do changes"})
+        })
+
+
+        const deletedBlogs1 = await blogModel.updateMany({ _id: { $in: deletedBlogs } }, { $set: { isDeleted: true, deletedAt: new Date() } })
+
+       // console.log(deletedBlogs1)
+
+
+        return res.status(200).send({ status: true, msg: "Blogs Deleted Successfully"})
+
+    
 
         } catch (err) {
             res.status(500).send({ status: false, msg: err.message });
