@@ -71,6 +71,8 @@ const getAuthor = async function (req, res) {
   res.status(201).send({ status: true, data: alldata })
 }
 
+//-------------------------------------------login author-----------------------------------------------------------//
+
 
 
 
