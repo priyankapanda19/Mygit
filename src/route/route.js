@@ -9,12 +9,14 @@ const Mw = require("../middleware/auth");
 router.post("/authors", author.createAuthor)
 router.get("/authors", author.getAuthor)
 
+//---------------------- Author LOGIN ---------------------------------------------------
+
+router.post("/loginAuthor",author.loginAuthor)
+
 
 //---------------------- CREATE and GET Blog using JWT ----------------------------------
 
 router.post("/blogs", blog.createBlog)
-
-router.post("/loginAuthor",author.loginAuthor)
 router.get("/blogs",Mw.authentication,Mw.authorisation,blog.getBlog)
 
 //---------------------- UPDATE Blog using JWT ------------------------------------------
@@ -26,5 +28,7 @@ router.put("/blogs/:blogId",Mw.authentication,Mw.authorisation,blog.updateBlog)
 
 router.delete("/blogs/:blogId",Mw.authentication,Mw.authorisation,blog.deleteBlog)
 router.delete("/blogs", Mw.authentication,Mw.authorisation,blog.deleteQueryParams)
+
+
 
 module.exports = router;

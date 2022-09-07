@@ -72,6 +72,8 @@ const getAuthor = async function (req, res) {
 }
 
 //-------------------------------------------login author-----------------------------------------------------------//
+
+
 const loginAuthor=async function (req,res){
   try{
   let authorId=req.body.email
@@ -91,14 +93,6 @@ const loginAuthor=async function (req,res){
   res.status(400).send({status:false,error:err.message})
 }
 }
-
-
-
-
-
-
-
-
 
 
 module.exports.loginAuthor=loginAuthor
