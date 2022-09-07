@@ -1,5 +1,5 @@
 const jwt=require("jsonwebtoken")
-const authorModel=require("../Models/authorModel")
+const userModel=require("../Models/authorModel")
 
 
 //-------------------------------authentication-----------------------------//
@@ -55,6 +55,8 @@ const authorisation = async function (req, res, next) {
 
 
   //--------------------------------------/////---------------------------------//
+
+  
   module.exports.authentication = authentication
   module.exports.authorisation = authorisation
   
