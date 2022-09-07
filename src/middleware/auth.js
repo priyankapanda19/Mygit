@@ -1,5 +1,5 @@
 const jwt=require("jsonwebtoken")
-const userModel=require("../Models/authorModel")
+const blogModel = require("../models/blogModel");
 
 
 //-------------------------------authentication-----------------------------//
@@ -7,15 +7,17 @@ const userModel=require("../Models/authorModel")
 const authentication=async function(req,res){
     
      try{
-          let token = req.headers["x-auth-token"];
+          let token = req.headers["x-api-key"];
+          if(!token)token=req.headers[x-Api-key]
         
-        if (!token) return res.status(404).send({ msg: "token must be present" });    
+        if (!token) return res.status(401).send({ status:false,msg: "token must be present" });    
         console.log(token);
         
-        let decodedToken = jwt.verify(token, "this is my privet key");   
+        let decodedToken = jwt.verify(token, "this is my privet key")
+            
         if (!decodedToken) 
         return res.status(400).send({status:false,msg:"token is invalid"})  
-        req.token=decodedToken                                   
+        req.loginAuthorId=decodedToken._id                                   
          
         
             next()
@@ -26,32 +28,33 @@ const authentication=async function(req,res){
 
 //---------------------------------authorization--------------------------------------//
 
-const authorisation = async function(req, res, next){
-    try{
-      let token = req.headers["x-auth-token"];
-          
-      let decodedToken = jwt.verify(token, "this is my privet key");
-      
-      let authorId = req.params.authorId;
-      let authorDetails =  await authorModel.findById(authorId);
-      if (!authorDetails)
-        return res.send({ status: false, msg: "No such author exists" });
-  
-      let userToBeModified = req.params.authorId;
-      let userLoggedIn = decodedToken.authorId
-    
-      if(userToBeModified != userLoggedIn) 
-      return res.status(403).send({status: false, msg: 'Author logged is not allowed to modify the requested author data'});
-  
+
+const authorisation = async function (req, res, next) {
+
+  try {
      
+
+    let authorToBeModified = req.params.blogId
+    console.log(authorToBeModified)
+
+    let blog = await blogModel.findById({ _id: authorToBeModified })    
   
+    console.log(blog)
+    console.log(req.loggedInAuthorId)
+    if (blog.authorId != req.loggedInAuthorId) {    
+      return res.status(403).send({ status: false, msg: 'Author logged is not allowed to modify the requested data' })
+    }
     next()
-    }catch(error){
-    res.send({ status: true, data: authorDetails });
+  } catch (err) {
+    return res.status(500).send({ status: false, msg: err.message })
   }
-  }
-  
+
+
+}
+
+
+
   //--------------------------------------/////---------------------------------//
+
   module.exports.authentication = authentication
   module.exports.authorisation = authorisation
-  
