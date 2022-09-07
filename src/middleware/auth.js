@@ -1,5 +1,5 @@
 const jwt=require("jsonwebtoken")
-const userModel=require("../Models/authorModel")
+const blogModel = require("../models/blogModel");
 
 
 //-------------------------------authentication-----------------------------//
