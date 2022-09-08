@@ -4,11 +4,15 @@ const objectId = mongoose.Schema.Types.ObjectId
 const blogSchema = new mongoose.Schema({
     title: {
         type: String,
+         
+
         required: true,
+        
     },
     body: {
         type: String,
         required: true,
+    
     },
     authorId: {
         type: objectId,
@@ -40,4 +44,4 @@ const blogSchema = new mongoose.Schema({
     { timestamps: true });
 
 
-module.exports = mongoose.model('blogDb', blogSchema)  
+module.exports = mongoose.model('blogDb', blogSchema)
