@@ -14,35 +14,14 @@ const isValidObjectId = function (value) {            //for validating object id
 const createBlog = async function (req, res) {
     try {
         let blog = req.body
+ let Blog =await blogModel.create(blog)
+        let author=req.body.authorId
+        let checkauthor = await authorModel.findById({_id:author})
+        if(!checkauthor){
+            res.status(400).send({status:false,msg:"authorId is not valid"})
+        }
+        res.status(201).send({status:true,msg:Blog})    
 
-        // getting the author with their Id and checking for validation
-        let authorId = await authorModel.find().select({ _id: 1 })
-        authorIdArr = authorId.map((obj) => { return obj._id.toString() })
-
-        // Validating blogData 
-        if (!blog.body) {
-            return res.status(400).send({ status: false, msg: "Body is required" })
-        }
-        if (!blog.title) {
-            return res.status(400).send({ status: false, msg: "Title is required" })
-        }
-        if (!blog.tags) {
-            return res.status(400).send({ status: false, msg: "Tags is required" })
-        }
-        if (!blog.category) {
-            return res.status(400).send({ status: false, msg: "Category is required" })
-        }
-        if (!blog.authorId) {
-            return res.status(400).send({ status: false, msg: "AuthorId is required" })
-        }
-        // if validation is true , create a blog
-        if (blog.authorId != undefined) {
-            if (authorIdArr.includes(blog.authorId)) {
-                let blogCreated = await blogModel.create(blog)
-                return res.status(201).send({ data: blogCreated })
-            }
-            res.status(400).send({ status: false, msg: "Author doesn't exist" })
-        }
     } catch (error) {
         res.status(500).send({ status: false, Error: error.message })
     }
@@ -181,6 +160,8 @@ const deleteQueryParams = async function (req, res) {
     }
 
 
+   
+
 //-------------------------------- exporting Modules --------------------------------------------- 
 
 module.exports.createBlog = createBlog;
@@ -188,3 +169,4 @@ module.exports.getBlog = getBlog
 module.exports.updateBlog = updateBlog
 module.exports.deleteBlog = deleteBlog
 module.exports.deleteQueryParams = deleteQueryParams
+
