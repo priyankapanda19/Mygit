@@ -88,16 +88,12 @@ const loginAuthor = async function (req, res) {
     if (Object.keys(req.body).length == 0) {
       return res.status(400).send({ status: false, msg: "Data is required" })
     }
-    if (!email) {
-      return res.status(400).send({ status: false, msg: "UserName is required" })
-    }
-    if (!password) {
-      return res.status(400).send({ status: false, msg: "Password is required" })
-    }
+    
    
 
-    let payload = {_id : email._id }                      //Setting the payload
-    let token = jwt.sign(payload, "this is my privet key");
+    let body=req.body 
+    let authorData=await authorModel.findOne({email:body.emailId})                   //Setting the payload
+    let token = jwt.sign({authorId:authorData._id,email:authorData.email}, "this is my privet key");
     res.setHeader("x-api-key", token);
     res.send({ status: true, token: token });
   } catch (error) {
