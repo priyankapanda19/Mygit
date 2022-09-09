@@ -1,4 +1,5 @@
 const authorModel = require("../models/authorModel")
+const jwt=require("jsonwebtoken")
 
 
 
@@ -74,27 +75,35 @@ const getAuthor = async function (req, res) {
 //-------------------------------------------login author-----------------------------------------------------------//
 
 
-const loginAuthor=async function (req,res){
-  try{
-  let authorId=req.body.email
-  let password=req.body.password
 
-  let author=await authorModel.findOne({email:authorId,password:password })
-  if(!author){
-      res.status(404).send({msg:"Author not found"})
+const loginAuthor = async function (req, res) {
+  try {
+    let email = req.body.email;
+    let password = req.body.password;
+
+   // console.log(userName)
+    //console.log(password)
+
+    let user = await authorModel.findOne({ email: email, password: password });
+    if (Object.keys(req.body).length == 0) {
+      return res.status(400).send({ status: false, msg: "Data is required" })
+    }
+    if (!email) {
+      return res.status(400).send({ status: false, msg: "UserName is required" })
+    }
+    if (!password) {
+      return res.status(400).send({ status: false, msg: "Password is required" })
+    }
+   
+
+    let payload = {_id : email._id }                      //Setting the payload
+    let token = jwt.sign(payload, "this is my privet key");
+    res.setHeader("x-api-key", token);
+    res.send({ status: true, token: token });
+  } catch (error) {
+    res.status(500).send({ staus: false, msg: error.message })
   }
-
-  let token =jwt.sign({
-      Author:author._id.toString(),
-      msg:"Authors"
-  }, "this is my privet key")
-  res.status(201).send({status:true, msg:"your succsefully login this server",token})  
-}catch(err){
-  res.status(400).send({status:false,error:err.message})
-}
-}
-
-
+};
 
 module.exports.loginAuthor=loginAuthor
 module.exports.createAuthor = createAuthor;

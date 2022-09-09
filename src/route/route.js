@@ -13,18 +13,22 @@ router.get("/authors", author.getAuthor)
 
 router.post("/loginAuthor",author.loginAuthor)
 
+
 //---------------------- CREATE and GET Blog using JWT ----------------------------------
 
-router.post("/blogs", blog.createBlog)
+router.post("/blogs",Mw.authentication, blog.createBlog)
 router.get("/blogs",Mw.authentication,Mw.authorisation,blog.getBlog)
 
 //---------------------- UPDATE Blog using JWT ------------------------------------------
 
-router.put("/blogs/:blogId",Mw.authentication,Mw.authorisation,blog.updateBlog)
+router.put("/blogs/:blogId",Mw.authentication,Mw.authorisation,blog.getBlog)
+
 
 //---------------------- Delete blog using JWT ------------------------------------------
 
 router.delete("/blogs/:blogId",Mw.authentication,Mw.authorisation,blog.deleteBlog)
-router.delete("/blogs", Mw.authentication,Mw.authorisation,blog.deleteQueryParams)
+router.delete("/blogs", Mw.authentication,blog.deleteQueryParams)
+
+
 
 module.exports = router;

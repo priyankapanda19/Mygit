@@ -1,30 +1,33 @@
-const jwt=require("jsonwebtoken")
+const jwt=require("jsonwebtoken");
+const authorModel = require("../models/authorModel");
 const blogModel = require("../models/blogModel");
 
 
 //-------------------------------authentication-----------------------------//
 
-const authentication=async function(req,res){
-    
-     try{
-          let token = req.headers["x-api-key"];
-          if(!token)token=req.headers[x-Api-key]
-        
-        if (!token) return res.status(401).send({ status:false,msg: "token must be present" });    
-        console.log(token);
-        
-        let decodedToken = jwt.verify(token, "this is my privet key")
-            
-        if (!decodedToken) 
-        return res.status(400).send({status:false,msg:"token is invalid"})  
-        req.loginAuthorId=decodedToken._id                                   
-         
-        
-            next()
-      }catch(err){
-      return res.status(500).send({msg: "Servor error " })
-      }
-      }
+const authentication = function (req, res, next) {
+  try {
+    let token = req.headers["x-api-key"];         //Getting token from header
+    // if (!token) token = req.headers["X-api-key"];     //checking token with Uppercase
+    if (!token) return res.status(401).send({ status: false, msg: "token must be present" });    //If neither condition satisfies & no token is present in the request header return error
+
+  console.log(token); 
+  
+    let decodedToken = jwt.verify(token, "this is my privet key")
+   if(!decodedToken) {
+      return res.status(401).send({ status: false, msg: "token is invalid" })}
+   
+      req.loggedInAuthorId = decodedToken._id
+      // console.log(decodedToken._id)
+      // console.log(req.loggedInAuthorId)
+
+     next()
+               //if token is present next() will call the respective API            
+
+  } catch (error) {
+    return res.status(500).send({ status: false, Error: error.message })
+  }
+};
 
 //---------------------------------authorization--------------------------------------//
 
@@ -32,16 +35,17 @@ const authentication=async function(req,res){
 const authorisation = async function (req, res, next) {
 
   try {
-     
+     //let token = req.headers["x-api-key"];
+     //let authordata = jwt.verify(token, "BloggingWebsite");
 
-    let authorToBeModified = req.params.blogId
-    console.log(authorToBeModified)
+    let userToBeModified = req.params.blogId
+    console.log(userToBeModified)
 
-    let blog = await blogModel.findById({ _id: authorToBeModified })    
-  
+    let blog = await blogModel.findById({ _id: userToBeModified })    //id in blogModel is same as getting from req.params or not
+    //let userLoggedIn = decodedToken._id
     console.log(blog)
     console.log(req.loggedInAuthorId)
-    if (blog.authorId != req.loggedInAuthorId) {    
+    if (blog.authorId != req.loggedInAuthorId) {    //We have stored decoded token into req.loggedInAuthorId and comparing it with blog.authorId
       return res.status(403).send({ status: false, msg: 'Author logged is not allowed to modify the requested data' })
     }
     next()
@@ -54,7 +58,9 @@ const authorisation = async function (req, res, next) {
 
 
 
-  //--------------------------------------/////---------------------------------//
-
+  //--------------------------------------/////------------------------------
+  
   module.exports.authentication = authentication
   module.exports.authorisation = authorisation
+  
+
