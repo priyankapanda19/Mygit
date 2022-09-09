@@ -7,6 +7,7 @@ const jwt=require("jsonwebtoken")
 
 const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
 const nameRegex = /^[ a-z ]+$/i
+const strongPwd=/(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
 
 // ----------------------------------------- CREATE AUTHOR ---------------------------------------------------------
 
@@ -56,6 +57,9 @@ const createAuthor = async function (req, res) {
       if (!author_data.password) {
         return res.status(400).send({ status: false, msg: "password is required" })
       }
+      if (!strongPwd.test(author_data.password))
+      return res.status(400).send({ status: false, message: "Please Enter Strong Password Format" })
+
 
       let authorCreated = await authorModel.create(author_data)
       res.status(201).send({ status: true, Message: "New author created successfully", author_data: authorCreated })
@@ -67,10 +71,10 @@ const createAuthor = async function (req, res) {
 
 // ----------------------------------------- GET AUTHOR ------------------------------------------------------------
 
-const getAuthor = async function (req, res) {
-  let alldata = await authorModel.find()
-  res.status(201).send({ status: true, data: alldata })
-}
+// const getAuthor = async function (req, res) {
+//   let alldata = await authorModel.find()
+//   res.status(201).send({ status: true, data: alldata })
+// }
 
 //-------------------------------------------login author-----------------------------------------------------------//
 
@@ -81,19 +85,29 @@ const loginAuthor = async function (req, res) {
     let email = req.body.email;
     let password = req.body.password;
 
-   // console.log(userName)
+    
     //console.log(password)
 
     let user = await authorModel.findOne({ email: email, password: password });
+    if (!emailRegex.test(author_data.email)){
+        return res.status(400).send({ status: false, message: "  Email valid Format not match found" })
+    }
+        if (!strongPwd.test(author_data.password))
+      return res.status(400).send({ status: false, message: "Use Strong Password " })
+
+    if(!user){
+      return res.status(404).send({status: false, msg: " Incorrect Email or password" })
+    }
+    
     if (Object.keys(req.body).length == 0) {
       return res.status(400).send({ status: false, msg: "Data is required" })
     }
     
    
-
-    let body=req.body 
-    let authorData=await authorModel.findOne({email:body.emailId})                   //Setting the payload
-    let token = jwt.sign({authorId:authorData._id,email:authorData.email}, "this is my privet key");
+   // console.log(user)
+    //let body=req.body 
+   // let authorData=await authorModel.findOne({email:body.emailId})                   //Setting the payload
+    let token = jwt.sign({authorId:user._id,email:user.email}, "this is my privet key");
     res.setHeader("x-api-key", token);
     res.send({ status: true, token: token });
   } catch (error) {
@@ -103,4 +117,4 @@ const loginAuthor = async function (req, res) {
 
 module.exports.loginAuthor=loginAuthor
 module.exports.createAuthor = createAuthor;
-module.exports.getAuthor = getAuthor
+//module.exports.getAuthor = getAuthor

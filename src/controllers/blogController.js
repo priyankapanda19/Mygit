@@ -7,19 +7,54 @@ const mongoose = require('mongoose')
 const isValidObjectId = function (value) {            //for validating object id
     return mongoose.Types.ObjectId.isValid(value) //returns boolean values
 }
+//--------------------//---------------------------
+const validate=function (value) {
 
+    if(typeof value=="number" ||typeof value=="undefined"||typeof value.length==null)
+    {
+    return false
+    }
+    if (typeof value == "string" && value.trim().length == 0)
+     { return false }
+    
+    
+    
 
+return true
+}
 // --------------------------------------- POST /blogs --------------------------------------
 
 const createBlog = async function (req, res) {
     try {
         let blog = req.body
-        let Blog = await blogModel.create(blog)
-        let author = req.body.authorId
-        let checkauthor = await authorModel.findById({ _id: author })
+        let { title, authorId, category,subcategory,body, tags } = blog
+ 
+       
+
+       // let author = req.body.authorId
+        if (!(title && authorId && category && body && tags)) return res.status(400).send({ status: false, msg: "Please fill the Mandatory Fields." });
+        if (!validate(title))
+            return res.status(400).send({ status: false, message: "Please enter Blog Title." });
+
+        if (!validate(category))
+        return res.status(400).send({ status: false, message: "Please enter Blog category." });
+
+        if (!validate(body))
+        return res.status(400).send({ status: false, message: "Please enter  Blog body." });
+        
+        if (!validate(tags))
+        return res.status(400).send({ status: false, message: "Please enter Blog Tags." });
+        
+        if (!validate(subcategory))
+        return res.status(400).send({ status: false, message: "Please enter subcategory." });
+        
+
+        let checkauthor = await authorModel.findById({ _id: authorId })
         if (!checkauthor) {
             res.status(400).send({ status: false, msg: "authorId is not valid" })
         }
+        
+        let Blog = await blogModel.create(blog)
         res.status(201).send({ status: true, msg: Blog })
 
     } catch (error) {
