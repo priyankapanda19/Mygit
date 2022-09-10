@@ -38,8 +38,12 @@ const blogSchema = new mongoose.Schema({
         default: false
     },
 
-    deletedAt: Date,
-    publishedAt: Date
+    deletedAt: {type: Date, 
+        default: Date.now},
+
+    publishedAt: {type: Date, 
+        default: Date.now}
+
 },
     { timestamps: true });
 

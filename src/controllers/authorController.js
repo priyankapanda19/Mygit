@@ -85,26 +85,23 @@ const loginAuthor = async function (req, res) {
     let email = req.body.email;
     let password = req.body.password;
 
-    
-    //console.log(password)
 
     let user = await authorModel.findOne({ email: email, password: password });
-    if (!emailRegex.test(author_data.email)){
-        return res.status(400).send({ status: false, message: "  Email valid Format not match found" })
+    if (!emailRegex.test(user.email)){
+        return res.status(400).send({ status: false, message: "Email valid Format not match found" })
     }
-        if (!strongPwd.test(author_data.password))
+        if (!strongPwd.test(user.password))
       return res.status(400).send({ status: false, message: "Use Strong Password " })
 
     if(!user){
-      return res.status(404).send({status: false, msg: " Incorrect Email or password" })
+      return res.status(404).send({status: false, msg: "Incorrect Email or password" })
     }
     
     if (Object.keys(req.body).length == 0) {
       return res.status(400).send({ status: false, msg: "Data is required" })
     }
     
-   
-   // console.log(user)
+    //console.log(user)
     //let body=req.body 
    // let authorData=await authorModel.findOne({email:body.emailId})                   //Setting the payload
     let token = jwt.sign({authorId:user._id,email:user.email}, "this is my privet key");
