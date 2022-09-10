@@ -10,10 +10,7 @@ const authentication = function (req, res, next) {
   try {
     let token = req.headers["x-api-key"];
 
-    if (!token) return res.status(401).send({ status: false, msg: "token must be present" });    //If neither condition satisfies & no token is present in the request header return error
-
-    // console.log(token); 
-
+    if (!token) return res.status(401).send({ status: false, msg: "token must be present" }); 
     jwt.verify(token, "this is my privet key", function (error, decodedToken) {
       if (error) {
         return res.status(401).send({ status: false, msg: "Token is aa invalid." })
@@ -37,9 +34,7 @@ const authentication = function (req, res, next) {
 const authorisation = async function (req, res, next) {
 
   try {
-    //  let token = req.headers["x-api-key"];
-    //  let authordata = jwt.verify(token, "this is my privet key");
-
+    
     let blogID = req.params.blogId
     let queryData = req.query
 
@@ -59,22 +54,17 @@ const authorisation = async function (req, res, next) {
 
     }
 
-
-
-
     console.log(blogID)
     let authId = req.token.authorId
 
     let blog = await blogModel.findOne({ _id: blogID }).select({ authorId: 1 })
     console.log(blog)
-    // console.log(authId)
-    if (authId == blog.authorId)    //id in blogModel is same as getting from req.params or not
+    if (authId == blog.authorId) 
     {
       next()
     }
-    // console.log(blog)
-    // console.log(req.loggedInAuthorId)
-    else {    //We have stored decoded token into req.loggedInAuthorId and comparing it with blog.authorId
+   
+    else { 
       return res.status(403).send({ status: false, msg: 'Permission Denied' })
     }
 

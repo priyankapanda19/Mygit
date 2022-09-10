@@ -69,13 +69,6 @@ const createAuthor = async function (req, res) {
     }
   }
 
-// ----------------------------------------- GET AUTHOR ------------------------------------------------------------
-
-// const getAuthor = async function (req, res) {
-//   let alldata = await authorModel.find()
-//   res.status(201).send({ status: true, data: alldata })
-// }
-
 //-------------------------------------------login author-----------------------------------------------------------//
 
 
@@ -101,10 +94,7 @@ const loginAuthor = async function (req, res) {
       return res.status(400).send({ status: false, msg: "Data is required" })
     }
     
-    //console.log(user)
-    //let body=req.body 
-   // let authorData=await authorModel.findOne({email:body.emailId})                   //Setting the payload
-    let token = jwt.sign({authorId:user._id,email:user.email}, "this is my privet key");
+     let token = jwt.sign({authorId:user._id,email:user.email}, "this is my privet key");
     res.setHeader("x-api-key", token);
     res.send({ status: true, token: token });
   } catch (error) {
@@ -114,4 +104,3 @@ const loginAuthor = async function (req, res) {
 
 module.exports.loginAuthor=loginAuthor
 module.exports.createAuthor = createAuthor;
-//module.exports.getAuthor = getAuthor
