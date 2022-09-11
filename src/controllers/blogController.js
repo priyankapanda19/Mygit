@@ -1,6 +1,7 @@
 const blogModel = require("../models/blogModel");
 const authorModel = require("../models/authorModel");
-const mongoose = require('mongoose')
+//const mongoose = require('mongoose')
+const moment=require('moment')
 
 //--------------------//---------------------------
 const validate = function (value) {
@@ -90,15 +91,31 @@ const getBlog = async function (req, res) {
 
 const updateBlog = async function (req, res) {
     try {
-
-        let blogId = req.params.blogId
         let blogData = req.body
-        let blog = await blogModel.findById(blogId)
+        const{ title,body,tags,subcategory }=blogData
+        let date=moment().format()
+        let blogId = req.params.blogId
+        
 
-        if (!blog) { res.status(404).send({ status: false, msg: "Blog is not found" }) }
-        let blogupdate = await blogModel.findOneAndUpdate({ _id: blogId }, blogData)
-        res.send({ status: true, Data: blogupdate })
-    } catch (error) {
+        let blog = await blogModel.findById(blogId)
+          if (!blog) {return res.status(404).send({ status: false, msg: "Please input valid blog Id" }) }
+
+
+
+        if(!blog.isDeleted){
+            if(blog.isPublished==true){
+                let specificBlog=await blogModel.findByIdAndUpdate(blogId,{$set:{title:title,body:body},$push:{"subcategory":subcategory,"tags":tags}})
+                res.status(201).send({data:{specificBlog}})
+            }else if(!blog.isPublished==false){
+                let specificBlog2=await blogModel.findByIdAndUpdate(blogId,{$set:{title:title,body:body,isPublished:true,publishedAt:date}})
+                res.status(201).send({data:{specificBlog2}})
+            }
+        }
+        else{
+ return res.status(400).send({ status: false, msg: "Blog is already deleted" })
+        }
+    }
+        catch(error){
         
         return res.status(500).send({ status: false, Error: error.message })
     }
@@ -153,7 +170,7 @@ const deleteQueryParams = async function (req, res) {
         }
     
         const deletedBlogs1 = await blogModel.updateMany({ ...filterQuery }, { $set: { isDeleted: true, deletedAt: new Date() } })
-        console.log(deletedBlogs1)
+        
 
         if (deletedBlogs1.modifiedCount == 0 || deletedBlogs1.matchedCount == 0) { return res.status(404).send({ status: false, msg: "Blog is not exist." }) }
 
@@ -174,4 +191,8 @@ module.exports.getBlog = getBlog
 module.exports.updateBlog = updateBlog
 module.exports.deleteBlog = deleteBlog
 module.exports.deleteQueryParams = deleteQueryParams
+
+
+
+
 

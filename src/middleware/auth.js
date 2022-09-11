@@ -16,14 +16,8 @@ const authentication = function (req, res, next) {
         return res.status(401).send({ status: false, msg: "Token is aa invalid." })
       } else {
         req.token = decodedToken
-        let Body=req.body
-      if(Object.keys(Body).length!==0)
-      {
-        if(Body.authorId!==req.token.authorId)
-        {
-          return res.status(403).send({status:false,msg:"Blog cant create"})
-        }
-      }
+        
+        
         next()
       }
 
@@ -48,7 +42,7 @@ const authorisation = async function (req, res, next) {
 
     if (Object.keys(queryData).length !== 0) {
 
-      const queryBlog = await blogModel.findOne({ ...queryData })
+      const queryBlog = await blogModel.findOne({authorId:req.token.authorId, ...queryData })
       if (!queryBlog) {
         return res.status(404).send({ status: false, msg: 'Blog not found' })
       }
@@ -72,7 +66,7 @@ const authorisation = async function (req, res, next) {
     }
    
     else { 
-      return res.status(403).send({ status: false, msg: 'Permission Denied' })
+      return res.status(403).send({ status: false, msg: 'Permission Not accept' })
     }
 
 
