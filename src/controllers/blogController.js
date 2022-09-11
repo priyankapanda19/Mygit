@@ -45,6 +45,7 @@ const createBlog = async function (req, res) {
         if (!checkauthor) {
             res.status(400).send({ status: false, msg: "authorId is not valid" })
         }
+        
 
         let Blog = await blogModel.create(blog)
         res.status(201).send({ status: true, msg: Blog })
