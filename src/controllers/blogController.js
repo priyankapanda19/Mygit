@@ -94,6 +94,12 @@ const updateBlog = async function (req, res) {
     try {
         let blogData = req.body
         const{ title,body,tags,subcategory }=blogData
+
+        // if (Object.keys(data).length == 0) {
+        //     return res.status(404).send({ status: false, msg: "Data is Not defined" })
+        // }
+
+
         let date=moment().format()
         let blogId = req.params.blogId
         
@@ -113,7 +119,7 @@ const updateBlog = async function (req, res) {
             }
         }
         else{
- return res.status(400).send({ status: false, msg: "Blog is already deleted" })
+ return res.status(404).send({ status: false, msg: "Blog is already deleted" })
         }
     }
         catch(error){
@@ -172,6 +178,7 @@ const deleteQueryParams = async function (req, res) {
     
         const deletedBlogs1 = await blogModel.updateMany({ ...filterQuery }, { $set: { isDeleted: true, deletedAt: new Date() } })
         
+
 
         if (deletedBlogs1.modifiedCount == 0 || deletedBlogs1.matchedCount == 0) { return res.status(404).send({ status: false, msg: "Blog is not exist." }) }
 

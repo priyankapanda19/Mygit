@@ -1,6 +1,6 @@
-const { query } = require("express");
+//const { query } = require("express");
 const jwt = require("jsonwebtoken");
-const authorModel = require("../models/authorModel");
+//const authorModel = require("../models/authorModel");
 const blogModel = require("../models/blogModel");
 
 
@@ -38,28 +38,23 @@ const authorisation = async function (req, res, next) {
     
     let blogID = req.params.blogId
     let queryData = req.query
-
-
     if (Object.keys(queryData).length !== 0) {
 
       const queryBlog = await blogModel.findOne({authorId:req.token.authorId, ...queryData })
       if (!queryBlog) {
         return res.status(404).send({ status: false, msg: 'Blog not found' })
       }
-      console.log(queryBlog.authorId.toString())
-      console.log(req.token.authorId)
+      
       if (queryBlog.authorId.toString() !== req.token.authorId) {
         return res.status(404).send({ status: false, msg: 'Permission Denied' })
       }
       return next()
 
     }
-
-    console.log(blogID)
     let authId = req.token.authorId
 
     let blog = await blogModel.findOne({ _id: blogID }).select({ authorId: 1 })
-    console.log(blog)
+    //console.log(blog)
     if (authId == blog.authorId) 
     {
       next()
