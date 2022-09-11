@@ -16,7 +16,14 @@ const authentication = function (req, res, next) {
         return res.status(401).send({ status: false, msg: "Token is aa invalid." })
       } else {
         req.token = decodedToken
-        console.log(req.token)
+        let Body=req.body
+      if(Object.keys(Body).length!==0)
+      {
+        if(Body.authorId!==req.token.authorId)
+        {
+          return res.status(403).send({status:false,msg:"Blog cant create"})
+        }
+      }
         next()
       }
 

@@ -20,6 +20,7 @@ const validate = function (value) {
 const createBlog = async function (req, res) {
     try {
         let blog = req.body
+        let author=req.body.authorId
         let { title, authorId, category, subcategory, body, tags } = blog
 
         if (!(title && authorId && category && body && tags)) return res.status(400).send({ status: false, msg: "Please fill the Mandatory Fields." });
@@ -39,7 +40,7 @@ const createBlog = async function (req, res) {
             return res.status(400).send({ status: false, message: "Please enter subcategory." });
 
 
-        let checkauthor = await authorModel.findById({ _id: authorId })
+        let checkauthor = await authorModel.findById({ _id: author})
         if (!checkauthor) {
             res.status(400).send({ status: false, msg: "authorId is not valid" })
         }
@@ -94,11 +95,11 @@ const updateBlog = async function (req, res) {
         let blogData = req.body
         let blog = await blogModel.findById(blogId)
 
-        if (!blog) { res.status(404).send({ status: false, msg: "author is not found" }) }
+        if (!blog) { res.status(404).send({ status: false, msg: "Blog is not found" }) }
         let blogupdate = await blogModel.findOneAndUpdate({ _id: blogId }, blogData)
-        res.send({ status: updatebogsucsess, Data: blogupdate })
+        res.send({ status: true, Data: blogupdate })
     } catch (error) {
-        console.log(error)
+        
         return res.status(500).send({ status: false, Error: error.message })
     }
 
