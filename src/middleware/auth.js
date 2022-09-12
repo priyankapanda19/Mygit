@@ -46,7 +46,7 @@ const authorisation = async function (req, res, next) {
       }
       
       if (queryBlog.authorId.toString() !== req.token.authorId) {
-        return res.status(404).send({ status: false, msg: 'Permission Denied' })
+        return res.status(401).send({ status: false, msg: 'Permission Denied' })
       }
       return next()
 

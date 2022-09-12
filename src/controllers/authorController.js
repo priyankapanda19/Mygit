@@ -87,7 +87,7 @@ const loginAuthor = async function (req, res) {
       return res.status(400).send({ status: false, message: "Use Strong Password " })
 
     if(!user){
-      return res.status(404).send({status: false, msg: "Incorrect Email or password" })
+      return res.status(400).send({status: false, msg: "Incorrect Email or password" })
     }
     
     if (Object.keys(req.body).length == 0) {

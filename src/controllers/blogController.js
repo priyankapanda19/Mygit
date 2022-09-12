@@ -75,7 +75,7 @@ const getBlog = async function (req, res) {
 
         if (Object.keys(data).length != 0) {
             data.isDeleted = false
-            console.log(data)
+        
             let getBlog = await blogModel.find(data).populate("authorId")
             if (getBlog.length == 0) {
                 return res.status(404).send({ status: false, msg: "No such blog exist, Please provide correct data." })
@@ -95,9 +95,9 @@ const updateBlog = async function (req, res) {
         let blogData = req.body
         const{ title,body,tags,subcategory }=blogData
 
-        // if (Object.keys(data).length == 0) {
-        //     return res.status(404).send({ status: false, msg: "Data is Not defined" })
-        // }
+        if (Object.keys(data).length == 0) {
+            return res.status(404).send({ status: false, msg: "Data is Not defined" })
+        }
 
 
         let date=moment().format()
