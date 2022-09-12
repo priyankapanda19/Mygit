@@ -11,7 +11,7 @@ router.post("/authors", author.createAuthor)
 
 //---------------------- Login author----------------------------------
 
-router.post("/loginAuthor", author.loginAuthor)
+router.post("/login", author.loginAuthor)
 
 
 //---------------------- CREATE and GET Blog using JWT ----------------------------------

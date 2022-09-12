@@ -58,36 +58,36 @@ const createBlog = async function (req, res) {
 // --------------------------------------- GET /blogs --------------------------------------
 
 const getBlog = async function (req, res) {
-
     try {
-
-        const data = req.query
-
-        if (Object.keys(data).length == 0) {
-            const blog = await blogModel.find({ isPublished: true, isDeleted: false })
-            if (blog.length == 0) {
-                return res.status(404).send({ status: false, msg: "Blog doesn't Exists, field is required." })
-            }
-            res.status(200).send({ status: true, data: blog })
-
-        }
-
-
-        if (Object.keys(data).length != 0) {
-            data.isDeleted = false
-        
-            let getBlog = await blogModel.find(data).populate("authorId")
-            if (getBlog.length == 0) {
-                return res.status(404).send({ status: false, msg: "No such blog exist, Please provide correct data." })
-            }
-            res.status(200).send({ status: true, data: getBlog })
-        }
-
-
+      let { authorId, category, tags, subcategory } = req.query;
+      //console.log(tags);
+      let query = {};
+      if (authorId != null) query.authorId = authorId;
+      if (category != null) query.category = category;
+      if (tags != null) query.tags = tags;
+      if (subcategory != null) query.subcategory = subcategory;
+  
+      let totalBlogs = await blogModel.find({
+        isDeleted: false,
+        isPublished: true,
+      });
+  
+      if (totalBlogs.length === 0) {
+        res
+          .status(404)
+          .send({ status: false, msg: "None of the Blogs are Published" });
+      } else if (Object.keys(query).length === 0) {
+        res.status(200).send({ status: true, msg: totalBlogs });
+      } else {
+        let finalFilter = await blogModel.find(query);
+        res.status(200).send({ status: true, msg: finalFilter });
+      }
     } catch (error) {
-        res.status(500).send({ status: false, Error: error.message })
+      res.status(500).send({ status: false, msg: "server error" });
     }
-}// --------------------------------------- PUT /blogs/:blogId --------------------------------------
+  };
+
+// --------------------------------------- PUT /blogs/:blogId --------------------------------------
 
 
 const updateBlog = async function (req, res) {
@@ -95,7 +95,7 @@ const updateBlog = async function (req, res) {
         let blogData = req.body
         const{ title,body,tags,subcategory }=blogData
 
-        if (Object.keys(data).length == 0) {
+        if (Object.keys(blogData).length == 0) {
             return res.status(404).send({ status: false, msg: "Data is Not defined" })
         }
 
@@ -111,10 +111,10 @@ const updateBlog = async function (req, res) {
 
         if(!blog.isDeleted){
             if(blog.isPublished==true){
-                let specificBlog=await blogModel.findByIdAndUpdate(blogId,{$set:{title:title,body:body},$push:{"subcategory":subcategory,"tags":tags}})
+                let specificBlog=await blogModel.findByIdAndUpdate(blogId,{$set:{title:title,body:body},$push:{"subcategory":subcategory,"tags":tags}},{new:true})
                 res.status(201).send({data:{specificBlog}})
             }else if(!blog.isPublished==false){
-                let specificBlog2=await blogModel.findByIdAndUpdate(blogId,{$set:{title:title,body:body,isPublished:true,publishedAt:date}})
+                let specificBlog2=await blogModel.findByIdAndUpdate(blogId,{$set:{title:title,body:body,isPublished:true,publishedAt:date}},{new:true})
                 res.status(201).send({data:{specificBlog2}})
             }
         }
@@ -188,6 +188,7 @@ const deleteQueryParams = async function (req, res) {
         res.status(500).send({ status: false, msg: err.message });
     }
 }
+
 
 
 
