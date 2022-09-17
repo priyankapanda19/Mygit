@@ -13,7 +13,7 @@ const authentication = function (req, res, next) {
     if (!token) return res.status(401).send({ status: false, msg: "token must be present" }); 
     jwt.verify(token, "this is my privet key", function (error, decodedToken) {
       if (error) {
-        return res.status(401).send({ status: false, msg: "Token is aa invalid." })
+        return res.status(401).send({ status: false, msg: "Token is  invalid." })
       } else {
         req.token = decodedToken
         

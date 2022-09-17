@@ -13,7 +13,6 @@ const validate = function (value) {
 
 
 
-
     return true
 }
 // --------------------------------------- POST /blogs --------------------------------------
