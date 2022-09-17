@@ -38,7 +38,7 @@ const collegeDetails = async function (req, res) {
         if (!v.isvalidRequest(collegeName)) return res.status(400).send({ status: false, msg: 'collegeName query is required' })
         
         let collegeData = await collegeModel.findOne({ name: collegeName })
-        if(!collegeData) return res.status(400).send({ status: false, msg: 'collegeName not exist' })
+        if(!collegeData) return res.status(404).send({ status: false, msg: 'collegeName not exist' })
         
         let internData = await internModel.find({ collegeId: collegeData._id })
         let Data = { name: collegeData.name, fullName: collegeData.fullName, logolink: collegeData.logoLink, interns: internData }
