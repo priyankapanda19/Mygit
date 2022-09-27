@@ -72,7 +72,7 @@ const createBook = async function (req, res) {
 
 
         let bookData = await bookModel.create(data)
-        res.status(201).send({ status: true, message: "Blog has been created", data: bookData });
+        res.status(201).send({ status: true, message: "Book has been created", data: bookData });
 
     } catch (err) {
         return res.status(500).send({ Satus: false, message: err.message });
