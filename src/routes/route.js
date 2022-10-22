@@ -13,7 +13,7 @@ router.post("/register", userController.createUser);
 
 router.post("/login", userController.loginUser);                                                                //>>>>>>>>>> post api (user Login)
 
-router.get("/user/:userId/profile",mw.Authentication, userController.getUserProfile);                           //>>>>>>>>>>>>> Get User Profile
+router.get("/user/:userId/profile",mw.Authentication,mw.Authorization, userController.getUserProfile);                           //>>>>>>>>>>>>> Get User Profile
 
 router.put("/user/:userId/profile",mw.Authentication, mw.Authorization, userController.updateUserProfile);      //>>>>>>>>>>> user Profile update
 

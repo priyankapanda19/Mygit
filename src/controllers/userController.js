@@ -66,7 +66,7 @@ const createUser = async function (req, res) {
 
         //validate address
 
-        address = JSON.parse(address)   // here you can call stack And execution
+        address = JSON.parse(address)   // here you can call stack And execution//convert txt into js obj
         
         if (!address) return res.status(400).send({ status: false, message: "address is required" })
         

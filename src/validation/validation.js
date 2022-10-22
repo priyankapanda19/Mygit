@@ -22,7 +22,7 @@ const isValidObjectId = (objectId) => {
 };
 
 const streetValidation = function (street) {
-  const streetRegex = /^[a-z \, A-Z \d]+$/;
+  const streetRegex = /^[a-zA-Z0-9 -\.]+$/;
   return streetRegex.test(street);
 };
 
